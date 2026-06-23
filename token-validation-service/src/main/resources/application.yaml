@@ -1,9 +1,14 @@
 spring:
   application:
     name: token-validation-service
+  web:
+    resources:
+      add-mappings: false
 
 server:
   port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /
 
 management:
   endpoints:
