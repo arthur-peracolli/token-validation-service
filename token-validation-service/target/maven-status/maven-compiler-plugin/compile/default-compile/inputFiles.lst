@@ -1,1 +1,11 @@
+C:\Users\Arthur Peracolli\Desktop\token-validation-service\token-validation-service\src\main\java\com\challenge\token_validation_service\application\controller\ValidationController.java
+C:\Users\Arthur Peracolli\Desktop\token-validation-service\token-validation-service\src\main\java\com\challenge\token_validation_service\domain\model\Claims.java
+C:\Users\Arthur Peracolli\Desktop\token-validation-service\token-validation-service\src\main\java\com\challenge\token_validation_service\domain\model\ValidationResult.java
+C:\Users\Arthur Peracolli\Desktop\token-validation-service\token-validation-service\src\main\java\com\challenge\token_validation_service\domain\rule\ClaimCountRule.java
+C:\Users\Arthur Peracolli\Desktop\token-validation-service\token-validation-service\src\main\java\com\challenge\token_validation_service\domain\rule\RoleRule.java
+C:\Users\Arthur Peracolli\Desktop\token-validation-service\token-validation-service\src\main\java\com\challenge\token_validation_service\domain\rule\ValidationRule.java
+C:\Users\Arthur Peracolli\Desktop\token-validation-service\token-validation-service\src\main\java\com\challenge\token_validation_service\infrastructure\exception\GlobalExceptionHandler.java
+C:\Users\Arthur Peracolli\Desktop\token-validation-service\token-validation-service\src\main\java\com\challenge\token_validation_service\shared\constants\ErrorMessages.java
+C:\Users\Arthur Peracolli\Desktop\token-validation-service\token-validation-service\src\main\java\com\challenge\token_validation_service\shared\constants\Roles.java
+C:\Users\Arthur Peracolli\Desktop\token-validation-service\token-validation-service\src\main\java\com\challenge\token_validation_service\shared\util\PrimeNumberValidator.java
 C:\Users\Arthur Peracolli\Desktop\token-validation-service\token-validation-service\src\main\java\com\challenge\token_validation_service\TokenValidationServiceApplication.java
