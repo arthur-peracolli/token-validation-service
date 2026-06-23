@@ -1,0 +1,21 @@
+# Arquivos de build
+target/
+*.log
+*.tmp
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Documentação
+README.md
+docs/
