@@ -8,6 +8,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class ValidationResponse {
 
-    @JsonProperty("valid")
-    private final boolean valid;
+  @JsonProperty("valid")
+  private final boolean valid;
 }

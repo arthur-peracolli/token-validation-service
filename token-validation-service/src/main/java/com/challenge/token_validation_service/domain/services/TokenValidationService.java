@@ -4,48 +4,60 @@ import com.challenge.token_validation_service.domain.models.ClaimData;
 import com.challenge.token_validation_service.domain.models.ValidationResult;
 import com.challenge.token_validation_service.domain.rules.ValidationRule;
 import com.challenge.token_validation_service.infrastructure.jwt.JwtPayloadExtractor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.util.Comparator;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
-@RequiredArgsConstructor
 public class TokenValidationService {
 
-    private final JwtPayloadExtractor extractor;
-    private final List<ValidationRule> rules;
+  private final JwtPayloadExtractor extractor;
+  private final List<ValidationRule> rules;
 
-    public boolean validateToken(String token) {
+  public TokenValidationService(JwtPayloadExtractor extractor, List<ValidationRule> rules) {
 
-        try {
+    this.extractor = extractor;
+    this.rules = List.copyOf(rules);
+  }
 
-            ClaimData claims =
-                    extractor.extract(token);
+  public boolean validateToken(String token) {
 
-            for (ValidationRule rule : orderedRules()) {
+    log.info("Token validation started");
 
-                ValidationResult result =
-                        rule.validate(claims);
+    try {
 
-                if (!result.isValid()) {
-                    return false;
-                }
-            }
+      ClaimData claims = extractor.extract(token);
 
-            return true;
+      for (ValidationRule rule : orderedRules()) {
 
-        } catch (Exception ex) {
+        ValidationResult result = rule.validate(claims);
 
-            return false;
+        if (!result.isValid()) {
+
+          log.info(
+              "Token validation completed. valid=false, failedRule={}",
+              rule.getClass().getSimpleName());
+
+          return false;
         }
-    }
+      }
 
-    private List<ValidationRule> orderedRules() {
-        return rules.stream()
-                .sorted(Comparator.comparingInt(
-                        ValidationRule::getOrder))
-                .toList();
+      log.info("Token validation completed. valid=true");
+
+      return true;
+
+    } catch (Exception ex) {
+
+      log.error("Unexpected error during token validation", ex);
+
+      return false;
     }
+  }
+
+  private List<ValidationRule> orderedRules() {
+
+    return rules.stream().sorted(Comparator.comparingInt(ValidationRule::getOrder)).toList();
+  }
 }

@@ -6,8 +6,8 @@ import lombok.Getter;
 @Builder
 @Getter
 public class ClaimData {
-    private final String name;
-    private final String role;
-    private final String seed;
-    private final int claimCount;
+  private final String name;
+  private final String role;
+  private final String seed;
+  private final int claimCount;
 }
