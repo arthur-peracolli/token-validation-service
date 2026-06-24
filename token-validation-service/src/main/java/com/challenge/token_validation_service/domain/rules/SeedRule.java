@@ -1,6 +1,6 @@
 package com.challenge.token_validation_service.domain.rules;
 
-import com.challenge.token_validation_service.domain.models.Claims;
+import com.challenge.token_validation_service.domain.models.ClaimData;
 import com.challenge.token_validation_service.domain.models.ValidationResult;
 import com.challenge.token_validation_service.shared.constants.ErrorMessages;
 import com.challenge.token_validation_service.shared.utils.PrimeNumberValidator;
@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 public class SeedRule implements ValidationRule {
 
     @Override
-    public ValidationResult validate(Claims claims) {
+    public ValidationResult validate(ClaimData claims) {
         String seed = claims.getSeed();
 
         if (seed == null || seed.isEmpty()) {
