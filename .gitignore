@@ -1,5 +1,5 @@
 # Java
-token-validation-service/target/
+target/
 *.class
 
 # IDE

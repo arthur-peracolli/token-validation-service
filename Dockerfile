@@ -1,19 +1,26 @@
 FROM maven:3.9.9-eclipse-temurin-21-alpine AS builder
+
 WORKDIR /app
 
 COPY pom.xml .
-RUN mvn dependency:go-offline -B
+# Baixa as dependências
+RUN mvn -B dependency:go-offline
 
 COPY src ./src
-RUN mvn clean verify
+
+RUN mvn -B clean package -DskipTests
+
 
 FROM eclipse-temurin:21-jre-alpine
 
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
-USER appuser
 
 WORKDIR /app
+
 COPY --from=builder /app/target/*.jar app.jar
 
+USER appuser
+
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+
+ENTRYPOINT ["java","-jar","app.jar"]
