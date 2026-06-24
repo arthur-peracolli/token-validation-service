@@ -1,0 +1,48 @@
+name: Docker Build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  docker:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+
+      - name: Validate project
+        run: mvn clean verify
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Login ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build Docker Image
+        run: |
+          docker build -t token-validation-service .
+
+      - name: Tag Image
+        run: |
+          docker tag token-validation-service:latest \
+          581009775825.dkr.ecr.us-east-1.amazonaws.com/token-validation-service:latest
+
+      - name: Push Image
+        run: |
+          docker push 581009775825.dkr.ecr.us-east-1.amazonaws.com/token-validation-service:latest
