@@ -22,18 +22,10 @@ public class OpenApiConfig {
                         .version("1.0.0")
                         .contact(new Contact()
                                 .name("Arthur Peracolli")
-                                .email("seu-email@email.com")
+                                .email("arthurperacolli@hotmail.com")
                                 .url("https://github.com/arthur-peracolli"))
                         .license(new License()
                                 .name("MIT License")
-                                .url("https://opensource.org/licenses/MIT")))
-                .servers(List.of(
-                        new Server()
-                                .url("http://localhost:8080")
-                                .description("Servidor Local (Docker)"),
-                        new Server()
-                                .url("http://localhost:8080")
-                                .description("Servidor Local (Maven)")
-                ));
+                                .url("https://opensource.org/licenses/MIT")));
     }
 }

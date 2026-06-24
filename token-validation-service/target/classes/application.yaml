@@ -35,6 +35,5 @@ logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
 
-# Configuração do JWT (lendo da variável de ambiente)
 jwt:
   secret: ${JWT_SECRET}

@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,12 +68,19 @@ public class ValidationController {
             )
             @RequestParam String token
     ) {
-        log.info("Recebendo requisição para token: {}...",
-                token.substring(0, Math.min(token.length(), 10)));
+        log.info(
+                "Token validation request received. tokenLength={}, requestId={}",
+                token.length(),
+                MDC.get("requestId")
+        );
 
         boolean isValid = tokenValidationService.validateToken(token);
 
-        log.info("Resultado da validação: {}", isValid);
+        log.info(
+                "Token validation completed. valid={}, requestId={}",
+                isValid,
+                MDC.get("requestId")
+        );
 
         return ResponseEntity.ok(new ValidationResponse(isValid));
     }
