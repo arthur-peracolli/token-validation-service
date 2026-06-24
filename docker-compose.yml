@@ -1,65 +1,103 @@
-version: '3.8'
-
 services:
+
   app:
     build:
-      context: token-validation-service
+      context: .
       dockerfile: Dockerfile
-    container_name: token-validation-service
+
+    restart: unless-stopped
+
     ports:
       - "8080:8080"
-    environment:
-      - JWT_SECRET=${JWT_SECRET}
-      - SERVER_PORT=${SERVER_PORT:-8080}
-      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-dev}
-      - MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE=health,info,prometheus
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+
     env_file:
       - .env
+
+    environment:
+      JWT_SECRET: ${JWT_SECRET}
+      SERVER_PORT: ${SERVER_PORT:-8080}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-dev}
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,info,prometheus
+      MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED: "true"
+
+    healthcheck:
+      test: ["CMD","wget","-q","--spider","http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+    read_only: true
+
+    tmpfs:
+      - /tmp
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
     networks:
       - observability
-    healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/actuator/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
+
+
 
   prometheus:
     image: prom/prometheus:latest
-    container_name: prometheus
+
+    restart: unless-stopped
+
     ports:
       - "9090:9090"
+
     volumes:
-      - ./src/main/docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus_data:/prometheus
+
     command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+
+    depends_on:
+      app:
+        condition: service_healthy
+
     networks:
       - observability
-    depends_on:
-      - app
+
+
 
   grafana:
     image: grafana/grafana:latest
-    container_name: grafana
+
+    restart: unless-stopped
+
     ports:
       - "3000:3000"
+
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
-      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER:-admin}
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin}
+
     volumes:
       - grafana_data:/var/lib/grafana
-      - ./src/main/docker/grafana/provisioning:/etc/grafana/provisioning
+      - ./docker/grafana/provisioning:/etc/grafana/provisioning
+
+    depends_on:
+      prometheus:
+        condition: service_started
+
     networks:
       - observability
-    depends_on:
-      - prometheus
+
+
 
 networks:
   observability:
     driver: bridge
+
+
 
 volumes:
   prometheus_data:
