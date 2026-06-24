@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: token-validation-service-test
+
+logging:
+  level:
+    root: ERROR
+    com.challenge.token_validation_service: WARN
+
+management:
+  endpoints:
+    enabled-by-default: false

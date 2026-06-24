@@ -1,66 +1,63 @@
 package com.challenge.token_validation_service.domain.services;
 
-import com.challenge.token_validation_service.domain.models.Claims;
+import com.challenge.token_validation_service.domain.models.ClaimData;
 import com.challenge.token_validation_service.domain.models.ValidationResult;
 import com.challenge.token_validation_service.domain.rules.ValidationRule;
-import io.jsonwebtoken.JwtException;
-import lombok.RequiredArgsConstructor;
+import com.challenge.token_validation_service.infrastructure.jwt.JwtPayloadExtractor;
+import java.util.Comparator;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.List;
-
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class TokenValidationService {
 
-    private final JwtParserService jwtParserService;
-    private final List<ValidationRule> rules;
+  private final JwtPayloadExtractor extractor;
+  private final List<ValidationRule> rules;
 
-    public boolean validateToken(String token) {
-        log.info("Iniciando validação do token JWT");
+  public TokenValidationService(JwtPayloadExtractor extractor, List<ValidationRule> rules) {
 
-        if (token == null || token.isEmpty()) {
-            log.warn("Validação falhou: token é nulo ou vazio");
-            return false;
+    this.extractor = extractor;
+    this.rules = List.copyOf(rules);
+  }
+
+  public boolean validateToken(String token) {
+
+    log.info("Token validation started");
+
+    try {
+
+      ClaimData claims = extractor.extract(token);
+
+      for (ValidationRule rule : orderedRules()) {
+
+        ValidationResult result = rule.validate(claims);
+
+        if (!result.isValid()) {
+
+          log.info(
+              "Token validation completed. valid=false, failedRule={}",
+              rule.getClass().getSimpleName());
+
+          return false;
         }
+      }
 
-        try {
-            log.debug("Etapa 1: Decodificando token JWT...");
-            Claims claims = jwtParserService.parseClaims(token);
-            log.debug("Token decodificado com sucesso. Claims: Name={}, Role={}, Seed={}",
-                    claims.getName(), claims.getRole(), claims.getSeed());
+      log.info("Token validation completed. valid=true");
 
+      return true;
 
-            log.debug("Etapa 2: Executando {} regras de validação de negócio", rules.size());
-            List<ValidationRule> sortedRules = rules.stream()
-                    .sorted(Comparator.comparingInt(ValidationRule::getOrder))
-                    .toList();
+    } catch (Exception ex) {
 
-            for (ValidationRule rule : sortedRules) {
-                String ruleName = rule.getClass().getSimpleName();
-                log.debug("Executando regra: {} (ordem {})", ruleName, rule.getOrder());
+      log.error("Unexpected error during token validation", ex);
 
-                ValidationResult result = rule.validate(claims);
-
-                if (!result.isValid()) {
-                    log.warn("Validação falhou na regra '{}': {}", ruleName, result.getErrorMessage());
-                    return false;
-                }
-                log.debug("Regra '{}' passou com sucesso", ruleName);
-            }
-
-            log.info("✅ Token validado com sucesso! Todas as validações passaram.");
-            return true;
-
-        } catch (JwtException e) {
-            log.warn("Validação falhou: erro ao decodificar token: {}", e.getMessage());
-            return false;
-        } catch (Exception e) {
-            log.error("Erro inesperado ao validar token", e);
-            return false;
-        }
+      return false;
     }
+  }
+
+  private List<ValidationRule> orderedRules() {
+
+    return rules.stream().sorted(Comparator.comparingInt(ValidationRule::getOrder)).toList();
+  }
 }

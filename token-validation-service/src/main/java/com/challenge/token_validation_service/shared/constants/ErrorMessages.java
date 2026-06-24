@@ -2,20 +2,25 @@ package com.challenge.token_validation_service.shared.constants;
 
 public final class ErrorMessages {
 
-    private ErrorMessages() {
-    }
+  private ErrorMessages() {}
 
-    public static final String CLAIMS_NULL = "Claims estão nulas";
-    public static final String CLAIM_COUNT_INVALID = "Número de claims inválido. Esperado: %d, encontrado: %d";
+  public static final String CLAIM_COUNT_INVALID = "JWT must contain exactly 3 claims";
 
-    public static final String NAME_EMPTY = "Name está vazio";
-    public static final String NAME_TOO_LONG = "Name excede 256 caracteres";
-    public static final String NAME_CONTAINS_NUMBER = "Name contém caracteres numéricos";
+  public static final String NAME_EMPTY = "Name is empty";
 
-    public static final String ROLE_EMPTY = "Role está vazia";
-    public static final String ROLE_INVALID = "Role inválida: %s. Valores permitidos: %s";
+  public static final String NAME_TOO_LONG = "Name exceeds maximum length of 256 characters";
 
-    public static final String SEED_EMPTY = "Seed está vazia";
-    public static final String SEED_NOT_PRIME = "Seed não é um número primo";
-    public static final String SEED_INVALID_NUMBER = "Seed não é um número válido";
+  public static final String NAME_CONTAINS_NUMBER = "Name contains numeric characters";
+
+  public static final String ROLE_EMPTY = "Role is empty";
+
+  public static final String ROLE_INVALID = "Role is invalid";
+
+  public static final String SEED_EMPTY = "Seed is empty";
+
+  public static final String SEED_NOT_PRIME = "Seed is not a prime number";
+
+  public static final String JWT_INVALID_STRUCTURE = "Invalid JWT structure";
+
+  public static final String JWT_INVALID_PAYLOAD = "Invalid JWT payload";
 }

@@ -1,43 +1,44 @@
 package com.challenge.token_validation_service.domain.rules;
 
-import com.challenge.token_validation_service.domain.models.Claims;
-import com.challenge.token_validation_service.domain.models.ValidationResult;
-import com.challenge.token_validation_service.shared.constants.ErrorMessages;
-import com.challenge.token_validation_service.shared.constants.Roles;
-import lombok.extern.slf4j.Slf4j;
+import static com.challenge.token_validation_service.shared.constants.ErrorMessages.ROLE_EMPTY;
+import static com.challenge.token_validation_service.shared.constants.ErrorMessages.ROLE_INVALID;
 
-import java.util.Arrays;
+import com.challenge.token_validation_service.domain.models.ClaimData;
+import com.challenge.token_validation_service.domain.models.ValidationResult;
 import java.util.Set;
-import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 @Slf4j
+@Component
 public class RoleRule implements ValidationRule {
 
-    private static final Set<String> VALID_ROLES =
-            Arrays.stream(Roles.VALID_ROLES).collect(Collectors.toSet());
+  private static final Set<String> VALID = Set.of("Admin", "Member", "External");
 
-    @Override
-    public ValidationResult validate(Claims claims) {
-        String role = claims.getRole();
+  @Override
+  public ValidationResult validate(ClaimData claims) {
 
-        if (role == null || role.isEmpty()) {
-            log.warn("Role está vazia ou nula");
-            return ValidationResult.failure(ErrorMessages.ROLE_EMPTY);
-        }
+    String role = claims.getRole();
 
-        if (!VALID_ROLES.contains(role)) {
-            log.warn("Role inválida: {} (esperado: {})", role, Roles.VALID_ROLES);
-            return ValidationResult.failure(
-                    String.format(ErrorMessages.ROLE_INVALID, role, String.join(", ", Roles.VALID_ROLES))
-            );
-        }
+    if (role == null || role.isBlank()) {
 
-        log.debug("Validação da role passou: {}", role);
-        return ValidationResult.success();
+      log.warn("Validation failed. rule=RoleRule, reason=Role is empty");
+
+      return ValidationResult.failure(ROLE_EMPTY);
     }
 
-    @Override
-    public int getOrder() {
-        return 3;
+    if (!VALID.contains(role)) {
+
+      log.warn("Validation failed. rule=RoleRule, reason=Invalid role");
+
+      return ValidationResult.failure(ROLE_INVALID);
     }
+
+    return ValidationResult.success();
+  }
+
+  @Override
+  public int getOrder() {
+    return 3;
+  }
 }
