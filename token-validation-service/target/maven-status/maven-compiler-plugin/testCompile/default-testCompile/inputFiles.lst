@@ -1,2 +1,10 @@
+C:\Users\Arthur Peracolli\Desktop\token-validation-service\token-validation-service\src\test\java\com\challenge\token_validation_service\domain\rules\RoleRuleTest.java
+C:\Users\Arthur Peracolli\Desktop\token-validation-service\token-validation-service\src\test\java\com\challenge\token_validation_service\domain\rules\NameRuleTest.java
+C:\Users\Arthur Peracolli\Desktop\token-validation-service\token-validation-service\src\test\java\com\challenge\token_validation_service\architecture\PackageArchitectureTest.java
+C:\Users\Arthur Peracolli\Desktop\token-validation-service\token-validation-service\src\test\java\com\challenge\token_validation_service\domain\services\TokenValidationServiceTest.java
+C:\Users\Arthur Peracolli\Desktop\token-validation-service\token-validation-service\src\test\java\com\challenge\token_validation_service\domain\rules\SeedRuleTest.java
 C:\Users\Arthur Peracolli\Desktop\token-validation-service\token-validation-service\src\test\java\com\challenge\token_validation_service\TokenValidationServiceApplicationTests.java
-C:\Users\Arthur Peracolli\Desktop\token-validation-service\token-validation-service\src\test\java\com\challenge\token_validation_service\domain\services\JwtParserServiceTest.java
+C:\Users\Arthur Peracolli\Desktop\token-validation-service\token-validation-service\src\test\java\com\challenge\token_validation_service\domain\rules\ClaimCountRuleTest.java
+C:\Users\Arthur Peracolli\Desktop\token-validation-service\token-validation-service\src\test\java\com\challenge\token_validation_service\architecture\LayerArchitectureTest.java
+C:\Users\Arthur Peracolli\Desktop\token-validation-service\token-validation-service\src\test\java\com\challenge\token_validation_service\architecture\NamingConventionTest.java
+C:\Users\Arthur Peracolli\Desktop\token-validation-service\token-validation-service\src\test\java\com\challenge\token_validation_service\architecture\ValidationRuleOrderTest.java

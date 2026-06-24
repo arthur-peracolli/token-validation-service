@@ -5,11 +5,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Profile("challenge")
-public class NoOpJwtSignatureValidator
-        implements JwtSignatureValidator {
+public class NoOpJwtSignatureValidator implements JwtSignatureValidator {
 
-    @Override
-    public boolean validate(String token) {
-        return true;
-    }
+  @Override
+  public boolean validate(String token) {
+    return true;
+  }
 }
