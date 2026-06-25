@@ -1,0 +1,135 @@
+﻿openapi: 3.0.3
+info:
+  title: Token Validation Service API
+  description: |
+    API responsável pela validação de tokens JWT.
+    Esta especificação foi criada para facilitar a importação no Insomnia e Postman.
+    Ambientes disponíveis:
+    • Local
+    • AWS
+  version: "1.0.0"
+servers:
+  - url: http://localhost:8080
+    description: Ambiente Local
+  - url: http://token-validation-alb-1555674803.us-east-1.elb.amazonaws.com
+    description: Ambiente AWS
+tags:
+  - name: Validation
+    description: Validação de Tokens
+  - name: Health
+    description: Health Check
+  - name: Documentation
+    description: Documentação da API
+paths:
+  /api/validate:
+    get:
+      tags:
+        - Validation
+      summary: Validate JWT
+      description: |
+        Valida um JWT seguindo todas as regras do desafio.
+      parameters:
+        - name: token
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Token processado com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  valid:
+                    type: boolean
+              examples:
+                Valid Token:
+                  summary: Token válido
+                  value:
+                    valid: true
+                Invalid JWT:
+                  summary: JWT inválido
+                  value:
+                    valid: false
+                Name Contains Number:
+                  summary: Nome inválido
+                  value:
+                    valid: false
+                Extra Claim:
+                  summary: Claim extra
+                  value:
+                    valid: false
+                Invalid Role:
+                  summary: Role inválido
+                  value:
+                    valid: false
+                Non Prime Seed:
+                  summary: Seed inválido
+                  value:
+                    valid: false
+                Missing Claim:
+                  summary: Claim ausente
+                  value:
+                    valid: false
+                Empty Token:
+                  summary: Token vazio
+                  value:
+                    valid: false
+  /actuator/health:
+    get:
+      tags:
+        - Health
+      summary: Health Check
+      responses:
+        "200":
+          description: Aplicação saudável
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: UP
+  /swagger-ui/index.html:
+    get:
+      tags:
+        - Documentation
+      summary: Swagger UI
+      responses:
+        "200":
+          description: Interface Swagger
+  /v3/api-docs:
+    get:
+      tags:
+        - Documentation
+      summary: OpenAPI Specification
+      responses:
+        "200":
+          description: Documento OpenAPI
+components:
+  examples:
+    ValidToken:
+      summary: Token válido
+      value: >
+        eyJhbGciOiJIUzI1NiJ9.
+        eyJSb2xlIjoiQWRtaW4iLCJTZWVkIjoiNzg0MSIsIk5hbWUiOiJUb25pbmhvIEFyYXVqbyJ9.
+        QY05sIjtrcJnP533kQNk8QXcaleJ1Q01jWY_ZzIZuAg
+    InvalidJwt:
+      summary: JWT inválido
+      value: >
+        eyJhbGciOiJzI1NiJ9.
+        dfsdfsfryJSr2xrIjoiQWRtaW4iLCJTZrkIjoiNzg0MSIsIk5hbrUiOiJUb25pbmhvIEFyYXVqbyJ9.
+        QY05fsdfsIjtrcJnP533kQNk8QXcaleJ1Q01jWY_ZzIZuAg
+    NameContainsNumber:
+      summary: Nome inválido
+      value: >
+        eyJhbGciOiJIUzI1NiJ9.
+        eyJSb2xlIjoiRXh0ZXJuYWwiLCJTZWVkIjoiODgwMzciLCJOYW1lIjoiTTRyaWEgT2xpdmlhIn0.
+        6YD73XWZYQSSMDf6H0i3-kylz1-TY_Yt6h1cV2Ku-Qs
+    ExtraClaim:
+      summary: Claim extra
+      value: >
+        eyJhbGciOiJIUzI1NiJ9.
+        eyJSb2xlIjoiTWVtYmVyIiwiT3JnIjoiQlIiLCJTZWVkIjoiMTQ2MjciLCJOYW1lIjoiVmFsZGlyIEFyYW5oYSJ9.
+        cmrXV_Flm5mfdpfNUVopY_I2zeJUy4EZ4i3Fea98zvY
