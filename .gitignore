@@ -22,3 +22,9 @@ backend-challenge-infra/lambda/*.jar
 
 # Docker
 *.log
+
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+*.tfstate
+*.tfstate.*
