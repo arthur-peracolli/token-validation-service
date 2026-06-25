@@ -8,7 +8,10 @@ import com.challenge.token_validation_service.domain.models.ValidationResult;
 import com.challenge.token_validation_service.domain.rules.ValidationRule;
 import com.challenge.token_validation_service.infrastructure.jwt.JwtPayloadExtractor;
 import io.jsonwebtoken.JwtException;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class TokenValidationServiceTest {
@@ -18,6 +21,28 @@ class TokenValidationServiceTest {
   private final ValidationRule rule1 = mock(ValidationRule.class);
 
   private final ValidationRule rule2 = mock(ValidationRule.class);
+
+  private final MeterRegistry meterRegistry = mock(MeterRegistry.class);
+
+  private final Counter requestsCounter = mock(Counter.class);
+
+  private final Counter successCounter = mock(Counter.class);
+
+  private final Counter failureCounter = mock(Counter.class);
+
+  private TokenValidationService service;
+
+  @BeforeEach
+  void setUp() {
+
+    when(meterRegistry.counter("token.validation.requests")).thenReturn(requestsCounter);
+
+    when(meterRegistry.counter("token.validation.success")).thenReturn(successCounter);
+
+    when(meterRegistry.counter("token.validation.failure")).thenReturn(failureCounter);
+
+    service = new TokenValidationService(extractor, List.of(rule1, rule2), meterRegistry);
+  }
 
   @Test
   void shouldReturnTrueWhenAllRulesPass() {
@@ -30,10 +55,7 @@ class TokenValidationServiceTest {
     when(rule2.getOrder()).thenReturn(2);
 
     when(rule1.validate(claimData)).thenReturn(ValidationResult.success());
-
     when(rule2.validate(claimData)).thenReturn(ValidationResult.success());
-
-    TokenValidationService service = new TokenValidationService(extractor, List.of(rule1, rule2));
 
     boolean result = service.validateToken("token");
 
@@ -41,6 +63,10 @@ class TokenValidationServiceTest {
 
     verify(rule1).validate(claimData);
     verify(rule2).validate(claimData);
+
+    verify(requestsCounter).increment();
+    verify(successCounter).increment();
+    verify(failureCounter, never()).increment();
   }
 
   @Test
@@ -55,15 +81,16 @@ class TokenValidationServiceTest {
 
     when(rule1.validate(claimData)).thenReturn(ValidationResult.failure("error"));
 
-    TokenValidationService service = new TokenValidationService(extractor, List.of(rule1, rule2));
-
     boolean result = service.validateToken("token");
 
     assertFalse(result);
 
     verify(rule1).validate(claimData);
-
     verify(rule2, never()).validate(any());
+
+    verify(requestsCounter).increment();
+    verify(successCounter, never()).increment();
+    verify(failureCounter).increment();
   }
 
   @Test
@@ -80,11 +107,13 @@ class TokenValidationServiceTest {
 
     when(rule2.validate(claimData)).thenReturn(ValidationResult.failure("error"));
 
-    TokenValidationService service = new TokenValidationService(extractor, List.of(rule1, rule2));
-
     boolean result = service.validateToken("token");
 
     assertFalse(result);
+
+    verify(requestsCounter).increment();
+    verify(successCounter, never()).increment();
+    verify(failureCounter).increment();
   }
 
   @Test
@@ -98,18 +127,18 @@ class TokenValidationServiceTest {
     when(rule2.getOrder()).thenReturn(1);
 
     when(rule1.validate(claimData)).thenReturn(ValidationResult.success());
-
     when(rule2.validate(claimData)).thenReturn(ValidationResult.success());
-
-    TokenValidationService service = new TokenValidationService(extractor, List.of(rule1, rule2));
 
     service.validateToken("token");
 
     var inOrder = inOrder(rule2, rule1);
 
     inOrder.verify(rule2).validate(claimData);
-
     inOrder.verify(rule1).validate(claimData);
+
+    verify(requestsCounter).increment();
+    verify(successCounter).increment();
+    verify(failureCounter, never()).increment();
   }
 
   @Test
@@ -117,11 +146,13 @@ class TokenValidationServiceTest {
 
     when(extractor.extract("token")).thenThrow(new JwtException("invalid token"));
 
-    TokenValidationService service = new TokenValidationService(extractor, List.of(rule1, rule2));
-
     boolean result = service.validateToken("token");
 
     assertFalse(result);
+
+    verify(requestsCounter).increment();
+    verify(successCounter, never()).increment();
+    verify(failureCounter).increment();
   }
 
   @Test
@@ -135,10 +166,12 @@ class TokenValidationServiceTest {
 
     when(rule1.validate(claimData)).thenThrow(new RuntimeException("unexpected"));
 
-    TokenValidationService service = new TokenValidationService(extractor, List.of(rule1));
-
     boolean result = service.validateToken("token");
 
     assertFalse(result);
+
+    verify(requestsCounter).increment();
+    verify(successCounter, never()).increment();
+    verify(failureCounter).increment();
   }
 }
