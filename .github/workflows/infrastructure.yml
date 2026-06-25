@@ -44,7 +44,16 @@ jobs:
       - name: Setup OpenTofu
         uses: opentofu/setup-opentofu@v1
         with:
-          tofu_version: latest
+          tofu_version: "1.12.2"
+
+      - name: Show OpenTofu Version
+        run: tofu version
+
+      - name: Show Working Directory
+        run: |
+          pwd
+          ls -la
+          find . -name "*.tf"
 
       - name: Check OpenTofu Formatting
         run: tofu fmt -check -recursive
@@ -53,8 +62,7 @@ jobs:
         run: tofu init -input=false
 
       - name: Validate Configuration
-        run: |
-          tofu fmt -check -recursive -diff
+        run: tofu validate
 
       - name: Generate Plan
         run: tofu plan -input=false
