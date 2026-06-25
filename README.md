@@ -1,17 +1,66 @@
-# token-validation-service
-Production-ready JWT validator microservice with Spring Boot. Demonstrates SOLID principles, observability, and cloud-native practices.
+# Token Validation Service
 
-## 📋 Sprint Backlog
+API REST desenvolvida em **Java 21** e **Spring Boot** para geração e validação de tokens JWT, projetada com foco em boas práticas de arquitetura, infraestrutura como código e automação de deploy.
 
-O projeto foi dividido em 6 entregas incrementais (cards), seguindo uma metodologia ágil. Cada card possui critérios de aceite e está documentado como uma Issue no GitHub.
+A solução foi construída utilizando serviços da AWS, OpenTofu e GitHub Actions, simulando um fluxo de desenvolvimento utilizado em equipes de engenharia de software.
 
-| Card | Issue | Descrição | Status |
-| :---: | :--- | :--- | :---: |
-| **#1** | [#2 - Setup: Configurar ambiente](https://github.com/arthur-peracolli/token-validation-service/issues/2) | Configuração inicial do projeto com Spring Boot, Java 21 e Docker | ⏳ Todo |
-| **#2** | [#3 - Core: Validação estrutural do JWT](https://github.com/arthur-peracolli/token-validation-service/issues/3) | Implementação do parser e validação estrutural do token | ⏳ Todo |
-| **#3** | [#4 - Business Rules: Pipeline das 4 regras](https://github.com/arthur-peracolli/token-validation-service/issues/4) | Chain of Responsibility para validação das regras de negócio | ⏳ Todo |
-| **#4** | [#5 - Observability: Logs e métricas](https://github.com/arthur-peracolli/token-validation-service/issues/5) | Logs estruturados em JSON e métricas de negócio com Micrometer | ⏳ Todo |
-| **#5** | [#6 - Production: Docker e CI/CD](https://github.com/arthur-peracolli/token-validation-service/issues/6) | Containerização, Docker Compose e pipeline CI com GitHub Actions | ⏳ Todo |
-| **#6** | [#7 - Documentation: README e ADRs](https://github.com/arthur-peracolli/token-validation-service/issues/7) | Documentação completa com ADRs, premissas e instruções | ⏳ Todo |
+## Planejamento do Projeto
 
-> **📌 Progresso:** 0/6 cards concluídos | [Ver Project Board](https://github.com/users/arthur-peracolli/projects/1)
+Durante o desenvolvimento foi criado um conjunto de **cards** organizados em um **GitHub Project**, simulando um ambiente real de desenvolvimento ágil.
+
+O objetivo dessa organização foi demonstrar a capacidade de:
+
+* Planejar entregas incrementais.
+* Definir critérios de aceite para cada funcionalidade.
+* Organizar e priorizar atividades.
+* Acompanhar a evolução do projeto por meio de métricas.
+* Trabalhar seguindo práticas inspiradas em metodologias ágeis.
+
+Os cards representam apenas o planejamento e acompanhamento da execução do desafio, não sendo um requisito funcional da aplicação.
+
+O planejamento completo pode ser consultado em:
+
+* GitHub Projects
+* GitHub Issues
+
+---
+
+## Funcionalidades
+
+* Validação estrutural de tokens JWT.
+* Aplicação das regras de negócio propostas no desafio.
+* Logs estruturados para observabilidade.
+* Containerização utilizando Docker.
+* Deploy automatizado utilizando GitHub Actions.
+* Infraestrutura como código utilizando OpenTofu.
+* Execução da aplicação em AWS ECS Fargate.
+* Exposição da API através de Application Load Balancer.
+* Monitoramento utilizando Amazon CloudWatch.
+
+---
+
+## Tecnologias
+
+### Backend
+
+* Java 21
+* Spring Boot
+* Spring Security
+* JWT
+* Maven
+
+### Infraestrutura
+
+* OpenTofu
+* AWS ECS Fargate
+* AWS ECR
+* AWS Application Load Balancer
+* AWS IAM
+* Amazon CloudWatch
+
+### DevOps
+
+* Docker
+* GitHub Actions
+* CI/CD
+* GitHub Projects
