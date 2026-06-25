@@ -6,13 +6,14 @@ on:
       - main
     paths:
       - "backend-challenge-infra/**"
-      - ".github/workflows/terraform.yml"
+      - ".github/workflows/infrastructure.yml"
 
   pull_request:
     branches:
       - main
     paths:
       - "backend-challenge-infra/**"
+      - ".github/workflows/infrastructure.yml"
 
 jobs:
   opentofu:
@@ -24,7 +25,6 @@ jobs:
         working-directory: backend-challenge-infra
 
     permissions:
-      id-token: write
       contents: read
 
     env:
@@ -46,19 +46,19 @@ jobs:
         with:
           tofu_version: latest
 
-      - name: OpenTofu Format
+      - name: Check OpenTofu Formatting
         run: tofu fmt -check -recursive
 
-      - name: OpenTofu Init
-        run: tofu init
+      - name: Initialize OpenTofu
+        run: tofu init -input=false
 
-      - name: OpenTofu Validate
-        run: tofu validate
+      - name: Validate Configuration
+        run: |
+          tofu fmt -check -recursive -diff
 
-      - name: OpenTofu Plan
+      - name: Generate Plan
         run: tofu plan -input=false
 
-      - name: OpenTofu Apply
+      - name: Apply Infrastructure
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: tofu apply -auto-approve -input=false
-
