@@ -18,6 +18,21 @@ O objetivo foi simular um ambiente corporativo de desenvolvimento, aplicando boa
 
 ---
 
+# ✨ Características
+
+- API REST desenvolvida com Java 21 e Spring Boot
+- Arquitetura em camadas inspirada em Domain Driven Design
+- Validação de JWT baseada em regras de negócio
+- Documentação automática via Swagger/OpenAPI
+- Containerização com Docker
+- Infraestrutura como Código utilizando OpenTofu
+- Deploy automatizado na AWS utilizando GitHub Actions
+- Observabilidade com Spring Boot Actuator e Micrometer
+- Métricas compatíveis com Prometheus
+- Logging estruturado utilizando SLF4J e MDC
+
+---
+
 # Sumário
 
 * Visão Geral
@@ -127,6 +142,16 @@ A aplicação foi desenvolvida utilizando uma arquitetura em camadas inspirada e
 * IAM
 * VPC
 * Security Groups
+
+## Stack de Observabilidade
+
+A solução utiliza:
+
+* Spring Boot Actuator
+* Micrometer
+* Prometheus
+
+As métricas podem ser consumidas por ferramentas como Grafana para construção de dashboards e monitoramento em tempo real.
 
 ---
 
@@ -730,10 +755,61 @@ Todo o processo é realizado sem intervenção manual.
 
 # Engenharia de Prompt
 
-Utilizei o recurso de engenharia de prompt para otimizar a produtividade e qualidade do código.
+Durante o desenvolvimento deste projeto foram utilizadas ferramentas de Inteligência Artificial como apoio à engenharia de software.
 
-* Revisão de código.
-* Geração inicial de documentação.
-* Refinamento de workflows CI/CD.
-* Auxílio na modelagem da infraestrutura OpenTofu.
-* Apoio na elaboração de casos de teste e documentação da API.
+A utilização ocorreu como ferramenta auxiliar, principalmente para:
+
+* Revisão de código
+* Refinamento de arquitetura
+* Estruturação da documentação
+* Sugestões para pipelines CI/CD
+* Modelagem da infraestrutura OpenTofu
+* Revisão de boas práticas
+* Geração inicial da especificação OpenAPI
+
+Todas as implementações foram revisadas, adaptadas e validadas manualmente antes da utilização.
+
+# 📷 Evidências
+
+Durante o desenvolvimento foram registradas evidências da implementação e validação da solução, incluindo:
+
+- Execução dos pipelines CI/CD
+- Provisionamento da infraestrutura com OpenTofu
+- Deploy na AWS
+- Exposição da API através do Application Load Balancer
+- Swagger/OpenAPI
+- Métricas com Spring Boot Actuator e Micrometer
+- Testes da API
+- Evolução das entregas
+
+As evidências podem ser consultadas na seção **Issues** deste repositório, onde cada etapa foi documentada de forma incremental para simular um ambiente real de desenvolvimento e acompanhamento de atividades.
+
+# 🔗 Links Úteis
+
+## API
+
+http://token-validation-alb-1555674803.us-east-1.elb.amazonaws.com
+
+## Swagger UI
+
+http://token-validation-alb-1555674803.us-east-1.elb.amazonaws.com/swagger-ui/index.html
+
+## OpenAPI
+
+http://token-validation-alb-1555674803.us-east-1.elb.amazonaws.com/v3/api-docs
+
+## Health
+
+http://token-validation-alb-1555674803.us-east-1.elb.amazonaws.com/actuator/health
+
+## Métricas Prometheus
+
+http://token-validation-alb-1555674803.us-east-1.elb.amazonaws.com/actuator/prometheus
+
+# Observações
+
+A arquitetura principal da solução utiliza Amazon ECS Fargate para execução da aplicação.
+
+Embora o desafio também mencione Helm Chart, optou-se por utilizar ECS devido à sua simplicidade operacional e integração nativa com a AWS.
+
+Um Helm Chart poderá ser disponibilizado futuramente para implantação em ambientes Kubernetes como Amazon EKS.
