@@ -3,7 +3,7 @@ FROM maven:3.9.9-eclipse-temurin-21-alpine AS builder
 WORKDIR /app
 
 COPY pom.xml .
-# Baixa as dependências
+
 RUN mvn -B dependency:go-offline
 
 COPY src ./src
