@@ -34,16 +34,16 @@ jobs:
       - name: Tag Image
         run: |
           docker tag token-validation-service:latest \
-          ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/token-validation-service:latest
+            ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/token-validation-service:latest
 
       - name: Push Image
         run: |
           docker push \
-          ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/token-validation-service:latest
+            ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/token-validation-service:latest
 
       - name: Force ECS Deployment
         run: |
           aws ecs update-service \
-            --cluster token-validation-service \
-            --service token-validation-service-td-service-r87rc4un \
+            --cluster ${{ secrets.PROJECT_NAME }} \
+            --service ${{ secrets.PROJECT_NAME }} \
             --force-new-deployment
